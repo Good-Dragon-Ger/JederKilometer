@@ -1,0 +1,176 @@
+.logo{
+    width: 20%;
+    margin: 10px auto;
+    display: block;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+header {
+    background-color: #004f9b;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+nav {
+    background-color: #004f9b;
+}
+
+nav ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    justify-content: space-between;
+    height: 50px;
+}
+
+nav li {
+    margin-right: 20px;
+    position: relative;
+    background-color: #004f9b;
+}
+
+nav form input[type=submit] {
+    display: inherit;
+    border: none;
+}
+
+nav a, nav p, nav form input[type=submit] {
+    background-color: #004f9b;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+/* Stil für größere Bildschirme (Desktop) */
+@media (min-width: 768px) {
+    nav form {
+        display: inline;
+        padding: 14px 16px;
+        margin-top: 12px;
+    }
+
+    nav form input[type=submit] {
+        padding: 10px 20px;
+    }
+
+    nav li:last-child {
+        margin-right: 0;
+        padding-right: 10px;
+    }
+
+    nav li ul {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        display: none;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        background-color: #004f9b;
+    }
+
+    nav li:hover ul {
+        display: flex;
+        flex-direction: column;
+    }
+
+    nav li ul li {
+        margin-right: 0;
+        width: 100%;
+    }
+}
+
+/* Stil für kleinere Bildschirme (Mobile) */
+@media (max-width: 767px) {
+    nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        height: auto;
+    }
+
+    nav li {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    nav li:last-child {
+        margin-bottom: 0;
+        padding-right: 0;
+    }
+
+    nav li ul {
+        position: static;
+        display: none;
+    }
+
+    nav li:hover ul {
+        display: block;
+    }
+}
+
+footer {
+    background-color: #004f9b;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    width:100%;
+    bottom:0;
+    left:0;
+}
+
+#headline {
+    text-align: center;
+    display: block;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    /*background: #d1ecf1;*/
+}
+
+.main-skills{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.card-body{
+    /*background: #d1ecf1;*/
+    text-align: center;
+    border-color: #000000;
+    border-style: solid;
+    border-width: 1px;
+}
+
+canvas {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.btn-dark {
+    background-color: #004f9b;
+    border-color: #004f9b;
+}
+.btn-dark:hover {
+    background-color: #002e5d;
+    border-color: #002e5d;
+}
