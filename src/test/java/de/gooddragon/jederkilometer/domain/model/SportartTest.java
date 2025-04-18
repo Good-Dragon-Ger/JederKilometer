@@ -13,15 +13,16 @@ public class SportartTest {
     @DisplayName("Constructor mit ID")
     void test_01() {
         UUID id = UUID.randomUUID();
-
-        Sportart sportart = new Sportart(id, "Laufen", 0.0, false);
+        Sportart sportart = new Sportart(id, "Laufen", 0.0, "Laufen",false);
 
         sportart.setPreis(0.5);
+        sportart.setKategorie("Rad");
         sportart.setAktiv(true);
 
         assertThat(sportart.getId()).isEqualTo(id);
         assertThat(sportart.getSport()).isEqualTo("Laufen");
         assertThat(sportart.getPreis()).isEqualTo(0.5);
+        assertThat(sportart.getKategorie()).isEqualTo("Rad");
         assertThat(sportart.isAktiv()).isTrue();
     }
 }
