@@ -8,14 +8,16 @@
 }
 
 header {
-    background-color: #004f9b;
+    /*background-color: #004f9b;*/
+    background-color: #343a40;
     color: white;
     text-align: center;
     padding: 20px;
 }
 
 nav {
-    background-color: #004f9b;
+    /*background-color: #004f9b;*/
+    background-color: #343a40;
 }
 
 nav ul {
@@ -30,7 +32,8 @@ nav ul {
 nav li {
     margin-right: 20px;
     position: relative;
-    background-color: #004f9b;
+    /*background-color: #004f9b;*/
+    background-color: #343a40;
 }
 
 nav form input[type=submit] {
@@ -39,7 +42,8 @@ nav form input[type=submit] {
 }
 
 nav a, nav p, nav form input[type=submit] {
-    background-color: #004f9b;
+    /*background-color: #004f9b;*/
+    background-color: #343a40;
     text-decoration: none;
     text-align: center;
     color: white;
@@ -73,7 +77,8 @@ nav a, nav p, nav form input[type=submit] {
         list-style: none;
         padding: 0;
         margin: 0;
-        background-color: #004f9b;
+        /*background-color: #004f9b;*/
+        background-color: #343a40;
     }
 
     nav li:hover ul {
@@ -116,7 +121,8 @@ nav a, nav p, nav form input[type=submit] {
 }
 
 footer {
-    background-color: #004f9b;
+    /*background-color: #004f9b;*/
+    background-color: #343a40;
     color: white;
     text-align: center;
     padding: 20px;
@@ -146,31 +152,46 @@ main {
     /*background: #d1ecf1;*/
 }
 
-.main-skills{
+.main-skills {
     display: flex;
     flex-wrap: wrap;
     margin-top: 20px;
     margin-bottom: 30px;
+    align-items: stretch; /* sorgt für gleiche Höhe */
+    gap: 1rem; /* optional für Abstand zwischen den Kacheln */
 }
 
-.card-body{
-    /*background: #d1ecf1;*/
+.card-body {
+    display: flex; /* macht das Ganze zum Flex-Container */
+    flex-direction: column; /* für vertikale Ausrichtung */
+    justify-content: center;  /* Vertikal zentrieren */
+    align-items: center;      /* Horizontal zentrieren */
     text-align: center;
-    border-color: #000000;
-    border-style: solid;
-    border-width: 1px;
+    border: 1px solid #000;
+    flex: 1; /* sorgt für gleiche Breite in Kombination mit flexbox */
+    min-height: 200px; /* oder ein anderer fester Mindestwert */
+    box-sizing: border-box;
 }
 
-canvas {
-    height: 100% !important;
-    width: 100% !important;
+.card-text {
+    font-size: xxx-large;
 }
 
-.btn-dark {
-    background-color: #004f9b;
-    border-color: #004f9b;
+.charts {
+    margin-bottom: 5%;
 }
-.btn-dark:hover {
-    background-color: #002e5d;
-    border-color: #002e5d;
+
+.chart {
+    height: 100%;
+    width: 100%;
+    ;
 }
+
+/*.btn-dark {*/
+/*    background-color: #004f9b;*/
+/*    border-color: #004f9b;*/
+/*}*/
+/*.btn-dark:hover {*/
+/*    !*background-color: #002e5d;*!*/
+/*    !*border-color: #002e5d;*!*/
+/*}*/

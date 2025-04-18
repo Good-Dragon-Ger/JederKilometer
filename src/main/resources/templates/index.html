@@ -9,6 +9,7 @@
           th:href="@{css/jederKilometer.css}">
 
     <script src="../static/js/chart.umd.js" rel="script" th:src="@{js/chart.umd.js}"></script>
+    <script src="../static/js/charts.js" th:src="@{js/charts.js}" type="text/javascript"></script>
 </head>
 <body>
 <header role="banner" th:insert="~{fragments/header}">
@@ -29,17 +30,23 @@
             </section>
             <section class="col-lg-6 card-body">
                 <i class="fab fa-wordpress"></i>
-                <h3>Gesamte Summe</h3>
+                <h3 class="card-subtitle">Gesamte Summe</h3>
                 <p class="card-text" th:text="${geld}">150.00€</p>
             </section>
         </div>
-        <div class="row">
-            <script src="../static/js/charts.js" th:src="@{js/charts.js}" type="text/javascript"></script>
-            <canvas id="myChart" width=100%></canvas>
+        <div class="row chart">
+            <canvas class="charts" id="pieChart"></canvas>
             <script th:inline="javascript" type="text/javascript">
-                CHARTS.init('myChart','3d');
-                CHARTS.setData([[${data}]]);
-                CHARTS.setLabels([[${labels}]]);
+                CHARTS.init('pieChart','2d');
+                CHARTS.setData([[${dataPie}]]);
+                CHARTS.setLabels([[${labelsPie}]]);
+                CHARTS.getPieChart();
+            </script>
+            <canvas class="charts" id="barChart"></canvas>
+            <script th:inline="javascript" type="text/javascript">
+                CHARTS.init('barChart','2d');
+                CHARTS.setData([[${dataBar}]]);
+                CHARTS.setLabels([[${labelsBar}]]);
                 CHARTS.getHorizontalBarChart();
             </script>
         </div>
