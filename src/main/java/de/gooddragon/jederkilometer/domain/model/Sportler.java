@@ -12,12 +12,16 @@ public class Sportler {
     private final UUID id;
     private String userName;
     private String name;
+    private AggregateReference<Team, UUID> team;
     private final Set<AggregateReference<Aufzeichnung, UUID>> activities = new HashSet<>();
 
-    public Sportler(UUID id, String userName, String name, Set<UUID> activities) {
+    public Sportler(UUID id, String userName, String name, UUID team, Set<UUID> activities) {
         this.id = id;
         this.userName = userName;
         this.name = name;
+        if (team != null) {
+            this.team = AggregateReference.to(team);
+        }
         if (activities != null) {
             for (UUID activity : activities) {
                 this.activities.add(AggregateReference.to(activity));
@@ -25,12 +29,16 @@ public class Sportler {
         }
     }
 
-    public Sportler(String userName, String name, Set<UUID> activities) {
-        this(UUID.randomUUID(), userName, name, activities);
+    public Sportler(String userName, String name, UUID team, Set<UUID> activities) {
+        this(UUID.randomUUID(), userName, name, team, activities);
+    }
+
+    public Sportler(String userName, String name, UUID team) {
+        this(UUID.randomUUID(), userName, name, team, new HashSet<>());
     }
 
     public Sportler(String userName, String name) {
-        this(UUID.randomUUID(), userName, name, new HashSet<>());
+        this(UUID.randomUUID(), userName, name, null, new HashSet<>());
     }
 
     public UUID getId() {
@@ -43,6 +51,25 @@ public class Sportler {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UUID getTeam() {
+        if (team == null) {
+            return null;
+        }
+        return team.getId();
+    }
+
+    public void setTeam(UUID team) {
+        this.team = AggregateReference.to(team);
     }
 
     public Set<UUID> getActivities() {
@@ -59,13 +86,5 @@ public class Sportler {
         for (UUID activity : activities) {
             this.activities.add(AggregateReference.to(activity));
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
