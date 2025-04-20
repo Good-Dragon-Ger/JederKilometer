@@ -9,12 +9,12 @@ import java.util.UUID;
 public class Aufzeichnung {
 
     private final UUID id;
-    private final String sportart;
+    private final UUID sportart;
     private final double km;
     private final LocalDate datum;
     private final AggregateReference<Sportler, UUID> name;
 
-    public Aufzeichnung(UUID id, String sportart, double km,LocalDate datum, UUID name) {
+    public Aufzeichnung(UUID id, UUID sportart, double km,LocalDate datum, UUID name) {
         this.id = id;
         this.sportart = sportart;
         this.km = km;
@@ -22,7 +22,7 @@ public class Aufzeichnung {
         this.name = AggregateReference.to(name);
     }
 
-    public Aufzeichnung(String sportart, double km, LocalDate datum, UUID name) {
+    public Aufzeichnung(UUID sportart, double km, LocalDate datum, UUID name) {
         this(UUID.randomUUID(), sportart, km, datum, name);
     }
 
@@ -30,7 +30,7 @@ public class Aufzeichnung {
         return id;
     }
 
-    public String sportart() {
+    public UUID sportart() {
         return sportart;
     }
 

@@ -3,6 +3,7 @@ package de.gooddragon.jederkilometer.adapter.web.controller;
 import de.gooddragon.jederkilometer.adapter.web.config.MethodSecurityConfiguration;
 import de.gooddragon.jederkilometer.adapter.web.config.SecuConfig;
 import de.gooddragon.jederkilometer.adapter.web.config.UserConfig;
+import de.gooddragon.jederkilometer.helper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 @Import({SecuConfig.class, MethodSecurityConfiguration.class, UserConfig.class})
-public class WebControllerTest {
+public class WebControllerTests {
 
     @Autowired
     MockMvc mockMvc;
@@ -24,56 +25,35 @@ public class WebControllerTest {
     @Test
     @DisplayName("Der Status der Index Seite ist 200 OK")
     void test_01() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get(""))
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("Für die Index Seite wird die richtige View zurückgegeben.")
     void test_02() throws Exception{
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get(""))
                 .andExpect(view().name("index"));
     }
 
-    /*@Test
-    @DisplayName("Der Status der Fahrrad Seite ist 200 OK")
+    @Test
+    @DisplayName("Der Status der Login Seite ist 200 OK")
     void test_03() throws Exception {
-        mockMvc.perform(get("/fahrrad"))
+        mockMvc.perform(get("/login"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("Für die Fahrrad Seite wird die richtige View zurückgegeben.")
+    @DisplayName("Für die Login Seite wird die richtige View zurückgegeben.")
     void test_04() throws Exception{
-        mockMvc.perform(get("/fahrrad"))
-                .andExpect(view().name("bike"));
+        mockMvc.perform(get("/login"))
+                .andExpect(view().name("login"));
     }
 
     @Test
-    @DisplayName("Der Status der Laufen Seite ist 200 OK")
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Der Status der Login Seite nach login ist 302 FOUND")
     void test_05() throws Exception {
-        mockMvc.perform(get("/laufen"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Für die Laufen Seite wird die richtige View zurückgegeben.")
-    void test_06() throws Exception{
-        mockMvc.perform(get("/laufen"))
-                .andExpect(view().name("run"));
-    }
-
-    @Test
-    @DisplayName("Der Status der Gehen Seite ist 200 OK")
-    void test_07() throws Exception {
-        mockMvc.perform(get("/gehen"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Für die Gehen Seite wird die richtige View zurückgegeben.")
-    void test_08() throws Exception{
-        mockMvc.perform(get("/gehen"))
-                .andExpect(view().name("walk"));
-    }*/
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isFound());    }
 }

@@ -187,6 +187,10 @@ main {
     ;
 }
 
+#logout {
+    display: inline;
+}
+
 /*.btn-dark {*/
 /*    background-color: #004f9b;*/
 /*    border-color: #004f9b;*/

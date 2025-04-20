@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0">
+    <title>Title</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"
+          th:href="@{css/bootstrap.min.css}">
+    <link href="../static/css/jederKilometer.css" rel="stylesheet"
+          th:href="@{css/jederKilometer.css}">
+
+</head>
+<body>
+<header role="banner" th:insert="~{fragments/header}">
+</header>
+
+<nav aria-label="Hauptnavigation" role="navigation"></nav>
+
+<main role="main">
+    <article class="container">
+        <h1 id="headline">Admin Login</h1>
+        <a class="btn btn-dark" href="/oauth2/authorization/github">Login</a>
+    </article>
+</main>
+<footer class="footer" role="contentinfo" th:insert="~{fragments/footer}">
+</footer>
+</body>
+</html>

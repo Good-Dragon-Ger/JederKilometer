@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"
+          th:href="@{css/bootstrap.min.css}">
+    <link href="../static/css/jederKilometer.css" rel="stylesheet"
+          th:href="@{css/jederKilometer.css}">
+</head>
+<body>
+<header role="banner" th:insert="~{fragments/header}">
+</header>
+
+<nav aria-label="Hauptnavigation" role="navigation" th:insert="~{fragments/adminNavigation}">
+</nav>
+
+<main role="main">
+    <article class="container">
+        <h1 id="headline">Jeder Kilometer zählt</h1>
+        <h2>Gesamt</h2>
+        <div class="row main-skills">
+            <button class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/user}">
+                Userverwaltung
+            </button>
+            <button class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/activity}">
+                Aktivitätsverwaltung
+            </button>
+            <button class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/sport}">
+               Sportartverwaltung
+            </button>
+        </div>
+    </article>
+</main>
+<footer class="footer" role="contentinfo">
+</footer>
+</body>
+</html>
