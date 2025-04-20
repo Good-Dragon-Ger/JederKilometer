@@ -19,7 +19,7 @@ create table if not exists teams (
     id serial primary key,
     uuid uuid,
     name varchar(255),
-    "year" date
+    years int
 );
 
 create table if not exists sport (
