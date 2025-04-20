@@ -3,6 +3,7 @@ package de.gooddragon.jederkilometer.adapter.web.controller;
 import de.gooddragon.jederkilometer.adapter.web.config.MethodSecurityConfiguration;
 import de.gooddragon.jederkilometer.adapter.web.config.SecuConfig;
 import de.gooddragon.jederkilometer.adapter.web.config.UserConfig;
+import de.gooddragon.jederkilometer.helper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,25 @@ public class WebControllerTests {
         mockMvc.perform(get(""))
                 .andExpect(view().name("index"));
     }
+
+    @Test
+    @DisplayName("Der Status der Login Seite ist 200 OK")
+    void test_03() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Für die Login Seite wird die richtige View zurückgegeben.")
+    void test_04() throws Exception{
+        mockMvc.perform(get("/login"))
+                .andExpect(view().name("login"));
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Der Status der Login Seite nach login ist 302 FOUND")
+    void test_05() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isFound());    }
 }
