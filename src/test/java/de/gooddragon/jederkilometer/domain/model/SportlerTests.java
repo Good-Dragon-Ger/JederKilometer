@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SportlerTest {
+public class SportlerTests {
 
     @Test
     @DisplayName("Teste Constructor mit ID")

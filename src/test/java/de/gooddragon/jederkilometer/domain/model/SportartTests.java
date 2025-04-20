@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SportartTest {
+public class SportartTests {
 
     @Test
     @DisplayName("Constructor mit ID")
