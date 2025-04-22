@@ -26,7 +26,6 @@ _Jeder Kilometer zählt – tracke deine Aktivitäten und unterstütze dein Team
 - PostgreSQL & H2 (für lokale Entwicklung)
 - Flyway für Migrationsmanagement
 - Docker & Docker Compose
-- GraalVM (native Images)
 
 ## 🧱 Architektur
 
@@ -54,6 +53,9 @@ Das Projekt verwendet eine angepasste **Onion-Architektur**:
 - Docker (optional)
 
 ### Konfiguration (`application.properties`)
+
+Die Konfiguration kann entweder über `application.properties` oder vollständig über **Umgebungsvariablen** erfolgen (empfohlen für Deployment).
+
 
 ```properties
 # Datenbank
@@ -91,10 +93,10 @@ Anwendung läuft dann unter `http://localhost:8080`
 ## 🔐 Nutzung
 
 1. Öffne `http://localhost:8080`
-2. **Aktuell erfolgt der Login über GitHub**
-3. **Strava-Login ist in Zukunft geplant und wird GitHub ersetzen**
-4. Nach dem Login gelangst du auf dein Dashboard mit Statistiken
-5. Admin-Funktionen sind über `/admin` erreichbar
+2. Die Hauptanwendung mit Statistiken ist öffentlich zugänglich.
+3. **Ein Login (aktuell via GitHub) ist nur für den Adminbereich erforderlich.** über `/login` erreichbar 
+4. **Strava-Login ist geplant und wird GitHub zukünftig ersetzen.**
+5. Admin-Funktionen sind über `/admin` erreichbar und wird man nach erfolgreichem Login weitergeleitet
 
 ## 🧪 Testing & Native Build
 
@@ -102,8 +104,6 @@ Anwendung läuft dann unter `http://localhost:8080`
 # Tests
 ./gradlew test
 
-# Native Image (optional)
-./gradlew nativeCompile
 ```
 
 ## 📈 Weiterentwicklung

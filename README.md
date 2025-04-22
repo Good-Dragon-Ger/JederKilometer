@@ -27,7 +27,6 @@ The goal is to make athletic performance visible and to motivate teams and indiv
 - PostgreSQL & H2 (for local development)
 - Flyway for database migration
 - Docker & Docker Compose
-- GraalVM (native images)
 
 ## 🧱 Architecture
 
@@ -55,6 +54,8 @@ The project uses a customized **Onion Architecture**:
 - Docker (optional)
 
 ### Configuration (`application.properties`)
+
+Configuration can be provided via `application.properties` or entirely through **environment variables** (recommended for deployment).
 
 ```properties
 # Database
@@ -92,19 +93,16 @@ The application will be available at: `http://localhost:8080`
 ## 🔐 Usage
 
 1. Open `http://localhost:8080`
-2. **Login is currently via GitHub**
-3. **Strava login is planned and will replace GitHub login in the future**
-4. After logging in, you'll see your dashboard with activity statistics
-5. Admin features are available at `/admin`
+2. the main application with statistics is publicly accessible.
+3. **A login (currently via GitHub) is only required for the admin area** accessible via `/login`.
+4. **Strava login is planned and will replace GitHub in the future**.
+5. admin functions are accessible via `/admin` and you will be redirected after successful login`
 
 ## 🧪 Testing & Native Build
 
 ```bash
 # Run tests
 ./gradlew test
-
-# Optional: Build native image
-./gradlew nativeCompile
 ```
 
 ## 📈 Contributions
