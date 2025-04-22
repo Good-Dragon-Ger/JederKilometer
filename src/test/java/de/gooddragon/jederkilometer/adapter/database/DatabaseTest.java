@@ -132,7 +132,7 @@ public class DatabaseTest {
     @DisplayName("HashData können hinzugefügt und geladen werden")
     void Test_09() {
         HashMapDaten hashMapDaten = new HashMapDaten(12345678, true);
-        HashMapDaten saved = hashDataRepository.speichen(hashMapDaten);
+        HashMapDaten saved = hashDataRepository.save(hashMapDaten);
         assertThat(saved.hash()).isEqualTo(hashMapDaten.hash());
         assertThat(saved.value()).isEqualTo(hashMapDaten.value());
     }
