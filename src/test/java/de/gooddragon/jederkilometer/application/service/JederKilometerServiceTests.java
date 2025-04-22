@@ -34,7 +34,8 @@ class JederKilometerServiceTests {
     UUID id;
 
     @BeforeEach
-    void setUp() {service = new JederKilometerService(activityRepository, hashDataRepository, sportRepository, teamsRepository, userRepository, self);
+    void setUp() {
+        service = new JederKilometerService(activityRepository, hashDataRepository, sportRepository, teamsRepository, userRepository, self);
         id = UUID.randomUUID();
     }
 

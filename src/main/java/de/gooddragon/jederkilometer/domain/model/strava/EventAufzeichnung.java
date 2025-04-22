@@ -8,18 +8,20 @@ public record EventAufzeichnung(Athlete athlete,
                                 int moving_time,
                                 int elapsed_time,
                                 double total_elevation_gain,
-                                String type,
                                 String sport_type,
                                 String workout_type) {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EventAufzeichnung that)) return false;
-        return Double.compare(distance, that.distance) == 0 && moving_time == that.moving_time && elapsed_time == that.elapsed_time && Double.compare(total_elevation_gain, that.total_elevation_gain) == 0 && Objects.equals(name, that.name) && Objects.equals(type, that.type) && Objects.equals(athlete, that.athlete) && Objects.equals(sport_type, that.sport_type) && Objects.equals(workout_type, that.workout_type);
+        if (!(o instanceof EventAufzeichnung(
+                Athlete athlete1, String name1, double distance1, int movingTime, int elapsedTime,
+                double totalElevationGain, String sportType, String workoutType
+        ))) return false;
+        return Double.compare(distance, distance1) == 0 && moving_time == movingTime && elapsed_time == elapsedTime && Double.compare(total_elevation_gain, totalElevationGain) == 0 && Objects.equals(name, name1) && Objects.equals(athlete, athlete1) && Objects.equals(sport_type, sportType) && Objects.equals(workout_type, workoutType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(athlete, name, distance, moving_time, elapsed_time, total_elevation_gain, type, sport_type, workout_type);
+        return Objects.hash(athlete, name, distance, moving_time, elapsed_time, total_elevation_gain, sport_type, workout_type);
     }
 }
