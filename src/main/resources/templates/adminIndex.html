@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
@@ -16,19 +16,19 @@
 </nav>
 
 <main role="main">
-    <article class="container">
+    <article class="application">
         <h1 id="headline">Jeder Kilometer zählt</h1>
         <h2>Gesamt</h2>
         <div class="row main-skills">
-            <button class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/user}">
+            <a class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/user}">
                 Userverwaltung
-            </button>
-            <button class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/activity}">
+            </a>
+            <a class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/activity}">
                 Aktivitätsverwaltung
-            </button>
-            <button class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/sport}">
+            </a>
+            <a class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/sport}">
                Sportartverwaltung
-            </button>
+            </a>
         </div>
     </article>
 </main>

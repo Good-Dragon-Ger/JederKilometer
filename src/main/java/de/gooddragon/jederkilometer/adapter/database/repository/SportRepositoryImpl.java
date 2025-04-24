@@ -36,7 +36,7 @@ public class SportRepositoryImpl implements SportRepository {
     @Override
     public Sportart save(Sportart sportart) {
         Long id = repository.findByUuid(sportart.getId()).map(Sport::id).orElse(null);
-        Sport sport = new Sport(id, sportart.getId(), sportart.getSport(), sportart.getPreis(), sportart.getKategorie(), sportart.isAktiv());
+        Sport sport = new Sport(id, sportart.getId(), sportart.getSport(), sportart.getPreis(), sportart.getKategorie(), sportart.getAktiv());
         Sport savedSport = repository.save(sport);
         return convertSport(savedSport);
     }
