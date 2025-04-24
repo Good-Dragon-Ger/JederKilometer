@@ -96,15 +96,15 @@ public class StravaService {
     private void save(List<EventAufzeichnung> activities) {
         List<Sportler> sportler = service.alleSportler();
         if (!sportler.isEmpty()) {
-            HashMapDaten hash = new HashMapDaten(activities.hashCode(),true);
             for (EventAufzeichnung activity : activities) {
+                HashMapDaten hash = new HashMapDaten(activity.hashCode(),true);
                 if(activitiesHash.get(hash.hash()) == null) {
                     Sportler user = service.alleSportlerMitUsername(activity.athlete().firstname()+ " "+ activity.athlete().lastname());
                     if (user != null) {
-                        service.speicherAufzeichnung(convertToAufzeichnung(activity));
                         activitiesHash.put(hash.hash(), hash.value());
                         service.speicherHash(hash);
-                        System.err.println("save to database: " + activities);
+                        service.speicherAufzeichnung(convertToAufzeichnung(activity));
+                        System.err.println("save to database: " + activity);
                     }
                 }
             }
