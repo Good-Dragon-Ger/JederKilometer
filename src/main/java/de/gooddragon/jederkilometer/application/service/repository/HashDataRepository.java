@@ -8,5 +8,5 @@ public interface HashDataRepository {
 
     List<HashMapDaten> findAll();
 
-    HashMapDaten speichen(HashMapDaten hash);
+    HashMapDaten save(HashMapDaten hash);
 }

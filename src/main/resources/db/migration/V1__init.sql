@@ -2,7 +2,7 @@ create table if not exists activity (
     id serial primary key,
     uuid uuid,
     sport uuid,
-    km double,
+    km double precision,
     date date,
     name uuid
 );
@@ -26,7 +26,7 @@ create table if not exists sport (
     id serial primary key,
     uuid uuid,
     sport varchar(255),
-    price double,
+    price double precision,
     category varchar(255),
     active boolean
 );
