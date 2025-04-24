@@ -61,6 +61,10 @@ public class StravaService {
 
     @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void update() {
+        ladeStravaDaten();
+    }
+
+    private void ladeStravaDaten() {
         if (tokenExpired) {
             getToken();
         }
@@ -91,7 +95,6 @@ public class StravaService {
 
     private void save(List<EventAufzeichnung> activities) {
         List<Sportler> sportler = service.alleSportler();
-        sportler.forEach(System.err::println);
         if (!sportler.isEmpty()) {
             HashMapDaten hash = new HashMapDaten(activities.hashCode(),true);
             for (EventAufzeichnung activity : activities) {
@@ -132,13 +135,11 @@ public class StravaService {
                     .bodyToMono(Token.class)
                     .block();
 
-            System.err.println(response);
             assert response != null;
             token = response.access_token();
             tokenExpired = false;
         } catch (Exception e) {
             System.err.println("Error while refreshing token: " + e.getMessage());
-            tokenExpired = true;
         }
     }
 }
