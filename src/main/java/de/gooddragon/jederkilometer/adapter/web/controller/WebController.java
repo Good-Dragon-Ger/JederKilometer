@@ -36,10 +36,21 @@ public class WebController {
         List<String> labelsPie = new ArrayList<>();
         List <Double> kmBar = new ArrayList<>();
         List<Sportart> aktiv = new ArrayList<>();
+        HashMap<String, Set<UUID>> kategorie = new HashMap<>();
+        double money = 0.0;
+        List<Double> kmPie = new ArrayList<>();
 
         for(Sportart sportart : service.alleSportarten()) {
             if(sportart.getAktiv()) {
                 aktiv.add(sportart);
+                if(kategorie.containsKey(sportart.getKategorie())) {
+                    kategorie.get(sportart.getKategorie()).add(sportart.getId());
+                }
+                else {
+                    Set<UUID> ids = new HashSet<>();
+                    ids.add(sportart.getId());
+                    kategorie.put(sportart.getKategorie(), ids);
+                }
             }
         }
 
@@ -56,13 +67,12 @@ public class WebController {
                 Sportart sportart = service.findeSportartDurchId(aufzeichnung.sportart());
                 if (sportart != null && !labelsPie.contains(sportart.getKategorie())) {
                     labelsPie.add(sportart.getKategorie());
+                    kmPie.add(kmBerechnung.berechneGesamtKmProKategorie(aufzeichnungen, kategorie.get(sportart.getKategorie())));
                 }
             }
         }
-        double money = 0.0;
-        List<Double> kmPie = new ArrayList<>();
+
         for(UUID sportart : sportarten.stream().toList()) {
-            kmPie.add(kmBerechnung.berechneGesamtKmProSportart(aufzeichnungen, sportart));
             money += priceOfKM(kmBerechnung.berechneGesamtKmProSportart(aufzeichnungen, sportart),service.findeSportartDurchId(sportart).getPreis());
         }
 

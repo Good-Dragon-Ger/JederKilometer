@@ -42,4 +42,11 @@ public class KMBerechnung {
        List<Aufzeichnung> sportActivities = activityFilter.filterActivitiesByActiveSportart(activities, sportart);
        return sportActivities.stream().mapToDouble(Aufzeichnung::km).sum();
     }
+
+    public double berechneGesamtKmProKategorie(List<Aufzeichnung> activities, Set<UUID> kategorie) {
+        List<Aufzeichnung> categoryActivities = kategorie.stream().flatMap(sport -> activityFilter.filterActivitiesBySportart(activities, sport).stream()).toList();
+        return categoryActivities.stream()
+                .mapToDouble(Aufzeichnung::km)
+                .sum();
+    }
 }
