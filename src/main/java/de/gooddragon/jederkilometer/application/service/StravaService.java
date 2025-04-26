@@ -59,7 +59,7 @@ public class StravaService {
         }
     }
 
-    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
     public void update() {
         ladeStravaDaten();
     }
