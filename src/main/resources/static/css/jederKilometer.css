@@ -1,5 +1,4 @@
 .logo{
-    width: 20%;
     margin: 10px auto;
     display: block;
     background-size: cover;
@@ -54,6 +53,10 @@ nav a, nav p, nav form input[type=submit] {
 
 /* Stil für größere Bildschirme (Desktop) */
 @media (min-width: 768px) {
+    .logo{
+        width: 50%;
+        }
+
     nav form {
         display: inline;
         padding: 14px 16px;
@@ -94,6 +97,10 @@ nav a, nav p, nav form input[type=submit] {
 
 /* Stil für kleinere Bildschirme (Mobile) */
 @media (max-width: 767px) {
+    .logo{
+        width: 100%;
+    }
+
     nav ul {
         flex-direction: column;
         align-items: stretch;
@@ -189,6 +196,94 @@ main {
 
 #logout {
     display: inline;
+}
+
+.a-grid{
+    line-height: 11rem;
+}
+
+.grid-demo, .container-demo {
+    height: 12.5rem;
+    font-size: x-large;
+}
+
+.tile-grid-sm,
+.tile-grid-md,
+.tile-grid-alternating-1-4 {
+    display: grid;
+    grid-gap: 1rem;
+    /*width: 100%;*/
+    margin-top: 5%;
+    margin-bottom: 10%;
+}
+
+.application {
+    padding: 1rem;
+    display: block;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.tile-grid-alternating-1-4 {
+    grid-gap: 1rem;
+}
+
+.tile-grid-sm {
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem,100%),1fr));
+}
+
+.tile-grid-md {
+    grid-template-columns: repeat(auto-fit, minmax(min(30rem, 100%), 1fr));
+}
+
+nav {
+    background-color: #343a40;
+    padding: 0.5rem;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.menu-label {
+    display: none;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.nav-menu li {
+    margin: 0.2rem;
+}
+
+@media (max-width: 768px) {
+    .menu-label {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .menu-toggle:checked + .menu-label + .nav-menu {
+        display: flex;
+    }
+
+    .nav-menu li {
+        width: 100%;
+    }
 }
 
 /*.btn-dark {*/

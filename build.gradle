@@ -39,6 +39,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.tngtech.archunit:archunit:1.2.1'
+    testImplementation 'com.tngtech.archunit:archunit-junit5-engine:1.2.1'
     testRuntimeOnly 'com.h2database:h2'
 }
 

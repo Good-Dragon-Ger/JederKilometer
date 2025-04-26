@@ -23,6 +23,6 @@ public class SportartTests {
         assertThat(sportart.getSport()).isEqualTo("Laufen");
         assertThat(sportart.getPreis()).isEqualTo(0.5);
         assertThat(sportart.getKategorie()).isEqualTo("Rad");
-        assertThat(sportart.isAktiv()).isTrue();
+        assertThat(sportart.getAktiv()).isTrue();
     }
 }

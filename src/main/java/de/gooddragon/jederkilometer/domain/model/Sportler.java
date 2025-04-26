@@ -1,5 +1,6 @@
 package de.gooddragon.jederkilometer.domain.model;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 
 import java.util.HashSet;
@@ -10,7 +11,9 @@ import java.util.UUID;
 public class Sportler {
 
     private final UUID id;
+    @NotBlank(message = "Name darf nicht leer sein.")
     private String userName;
+    @NotBlank(message = "Name darf nicht leer sein.")
     private String name;
     private AggregateReference<Team, UUID> team;
     private final Set<AggregateReference<Aufzeichnung, UUID>> activities = new HashSet<>();
@@ -39,6 +42,10 @@ public class Sportler {
 
     public Sportler(String userName, String name) {
         this(UUID.randomUUID(), userName, name, null, new HashSet<>());
+    }
+
+    public Sportler() {
+        this(UUID.randomUUID(), null, null, null, new HashSet<>());
     }
 
     public UUID getId() {

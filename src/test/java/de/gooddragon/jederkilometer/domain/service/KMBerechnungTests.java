@@ -83,8 +83,8 @@ public class KMBerechnungTests {
     void test_04() {
         LocalDate datum = LocalDate.of(2025, 4, 24);
         List<Aufzeichnung> activities = Arrays.asList(
-                new Aufzeichnung(UUID.randomUUID(), 10.0, LocalDate.now(), UUID.randomUUID()),
-                new Aufzeichnung(UUID.randomUUID(), 15.0, LocalDate.now().plusDays(1), UUID.randomUUID())
+                new Aufzeichnung(UUID.randomUUID(), 10.0, datum, UUID.randomUUID()),
+                new Aufzeichnung(UUID.randomUUID(), 15.0, datum.plusDays(1), UUID.randomUUID())
         );
 
         double result = kmBerechnung.berechneGesamtKmProTag(activities, datum);

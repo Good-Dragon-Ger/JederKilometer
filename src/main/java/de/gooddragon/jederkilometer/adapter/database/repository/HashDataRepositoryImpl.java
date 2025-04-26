@@ -25,7 +25,7 @@ public class HashDataRepositoryImpl implements HashDataRepository {
 
     @Override
     public HashMapDaten save(HashMapDaten hash) {
-        Long id = repository.findAll().stream().map(HashData::id).max(Long::compareTo).orElse(null);
+        Long id = repository.findByHash(hash.hash()).map(HashData::id).orElse(null);
         HashData data = repository.save(new HashData(id, hash.hash(), hash.value()));
         return convertHashData(data);
     }

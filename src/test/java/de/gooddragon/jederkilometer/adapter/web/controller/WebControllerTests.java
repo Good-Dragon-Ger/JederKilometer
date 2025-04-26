@@ -3,11 +3,13 @@ package de.gooddragon.jederkilometer.adapter.web.controller;
 import de.gooddragon.jederkilometer.adapter.web.config.MethodSecurityConfiguration;
 import de.gooddragon.jederkilometer.adapter.web.config.SecuConfig;
 import de.gooddragon.jederkilometer.adapter.web.config.UserConfig;
+import de.gooddragon.jederkilometer.application.service.JederKilometerService;
 import de.gooddragon.jederkilometer.helper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,6 +23,9 @@ public class WebControllerTests {
 
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    JederKilometerService service;
 
     @Test
     @DisplayName("Der Status der Index Seite ist 200 OK")
@@ -47,7 +52,7 @@ public class WebControllerTests {
     @DisplayName("Für die Login Seite wird die richtige View zurückgegeben.")
     void test_04() throws Exception{
         mockMvc.perform(get("/login"))
-                .andExpect(view().name("login"));
+                .andExpect(view().name("adminLogin"));
     }
 
     @Test

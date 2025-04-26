@@ -98,7 +98,7 @@ public class DatabaseTest {
         assertThat(geladen.getSport()).isEqualTo(saved.getSport());
         assertThat(geladen.getPreis()).isEqualTo(saved.getPreis());
         assertThat(geladen.getKategorie()).isEqualTo(saved.getKategorie());
-        assertThat(geladen.isAktiv()).isEqualTo(saved.isAktiv());
+        assertThat(geladen.getAktiv()).isEqualTo(saved.getAktiv());
     }
 
     @Test
