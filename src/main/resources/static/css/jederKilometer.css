@@ -53,9 +53,9 @@ nav a, nav p, nav form input[type=submit] {
 
 /* Stil für größere Bildschirme (Desktop) */
 @media (min-width: 768px) {
-    .logo{
+    .logo {
         width: 50%;
-        }
+    }
 
     nav form {
         display: inline;
@@ -94,7 +94,6 @@ nav a, nav p, nav form input[type=submit] {
         width: 100%;
     }
 }
-
 /* Stil für kleinere Bildschirme (Mobile) */
 @media (max-width: 767px) {
     .logo{
@@ -159,6 +158,12 @@ main {
     /*background: #d1ecf1;*/
 }
 
+.chart-position{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .main-skills {
     display: flex;
     flex-wrap: wrap;
@@ -191,7 +196,6 @@ main {
 .chart {
     height: 100%;
     width: 100%;
-    ;
 }
 
 #logout {

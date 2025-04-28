@@ -1,8 +1,8 @@
 <input type="checkbox" id="menu-toggle" class="menu-toggle">
 <label for="menu-toggle" class="menu-label">☰</label>
-<ul class="nav-menu">
-    <li>
-        <a class="btn btn-dark" href="/">Home</a>
+<ul class="nav-menu" th:remove="all-but-first">
+    <li th:each="navi:${nav}">
+        <a class="btn btn-dark" th:href="@{{nav}(nav=${navi.link()})}" th:text="${navi.name()}">Home</a>
     </li>
     <li>
         <a class="btn btn-dark" href="#">Fahrrad</a>

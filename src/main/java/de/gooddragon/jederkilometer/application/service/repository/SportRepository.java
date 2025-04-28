@@ -14,4 +14,6 @@ public interface SportRepository {
     Sportart findByUuid(UUID sportart);
 
     Sportart save(Sportart sportart);
+
+    List<Sportart> findByCategory(String category);
 }

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -135,4 +136,23 @@ public class JederKilometerService {
     protected void saveSportler(Sportler sportler) {
         userRepository.save(sportler);
     }
+
+    public List<Aufzeichnung> findeAufzeichnungenDurchKategorie(String kategorie) {
+        List<Sportart> sportarten = sportRepository.findByCategory(kategorie);
+        List<Aufzeichnung> all = activityRepository.findAll();
+        List<Aufzeichnung> aufzeichnungen = new ArrayList<>();
+
+        for(Aufzeichnung aufzeichnung : all) {
+            for(Sportart sportart : sportarten) {
+                if(aufzeichnung.sportart().equals(sportart.getId())) {
+                    aufzeichnungen.add(aufzeichnung);
+                }
+            }
+        }
+
+        return aufzeichnungen;
+    }
+
+    public List<Sportart> findeSportartDurchKategorie(String kategorie) {
+        return sportRepository.findByCategory(kategorie);    }
 }
