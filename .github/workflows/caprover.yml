@@ -1,32 +1,38 @@
-name: CD to CapRover
-
 on:
-  workflow_run:
-    workflows: ["Java CI with Gradle"]
-    types:
-      - completed
+  push:
+    tags:
+      - 'v*'  # Nur bei Tags wie v1.0.0
 
 jobs:
   deploy:
-    if:   github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Docker Builds
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer .
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer:$TAG .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer:$TAG ${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer:latest
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer
+      - name: Push Docker images
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer:$TAG
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer:latest
 
       - name: Deploy to CapRover
         run: |
           npm install -g caprover
+          TAG=${GITHUB_REF#refs/tags/}
           caprover deploy --caproverUrl "${{ secrets.CAPROVER_SERVER }}" \
                           --appName "${{ secrets.CAPROVER_APP_NAME }}" \
                           --caproverPassword "${{ secrets.CAPROVER_PASSWORD }}" \
-                          --imageName "${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer"
+                          --imageName "${{ secrets.DOCKERHUB_USERNAME }}/jederkilometer:$TAG"
