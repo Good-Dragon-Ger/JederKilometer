@@ -105,9 +105,28 @@ var CHARTS = CHARTS || (function () {
                 options: {
                     plugins: {
                         legend: {
-                            onClick: () => {} // Leere Funktion verhindert die Klick-Interaktion
+                            labels: {
+                                font: {
+                                    weight: 'bold'    // Fettgedruckt für bessere Lesbarkeit
+                                },
+                                color: '#333',         // Dunkleres Grau für besseren Kontrast
+                                padding: 20             // Mehr Abstand zwischen den Einträgen
+                            }
                         }
-                    }
+                    },
+                    layout: {
+                        padding: {
+                            top: 30,
+                            bottom: 30
+                        }
+                    },
+                    elements: {
+                        arc: {
+                            borderWidth: 2, // Schöner dünner Rand
+                        }
+                    },
+                    cutout: '40%', // macht aus Pie ein bisschen Donut-Style, wirkt edler
+                    radius: '70%' // Diagramm wird kleiner (default wäre 100%)
                 }
             });
         },

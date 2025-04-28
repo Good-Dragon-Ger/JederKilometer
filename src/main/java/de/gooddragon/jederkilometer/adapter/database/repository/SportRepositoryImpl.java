@@ -41,6 +41,11 @@ public class SportRepositoryImpl implements SportRepository {
         return convertSport(savedSport);
     }
 
+    @Override
+    public List<Sportart> findByCategory(String category) {
+        return repository.findByCategory(category).stream().map(this::convertSport).toList();
+    }
+
     private Sportart convertSport(Sport sport) {
         return new Sportart(sport.uuid(), sport.sport(), sport.price(), sport.category(), sport.active());
     }

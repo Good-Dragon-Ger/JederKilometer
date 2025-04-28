@@ -35,7 +35,7 @@
                 <p class="card-text" th:text="${geld}">150.00€</p>
             </section>
         </div>
-        <div class="row chart">
+        <div class="row chart chart-position">
             <canvas class="charts" id="pieChart"></canvas>
             <script th:inline="javascript" type="text/javascript">
                 CHARTS.init('pieChart','2d');

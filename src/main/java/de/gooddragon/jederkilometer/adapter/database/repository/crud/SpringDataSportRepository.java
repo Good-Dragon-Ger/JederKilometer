@@ -15,5 +15,7 @@ public interface SpringDataSportRepository extends CrudRepository<Sport, Long> {
 
     Optional<Sport> findBySport(String sportart);
 
+    List<Sport> findByCategory(String category);
+
     Sport save(Sport sport);
 }

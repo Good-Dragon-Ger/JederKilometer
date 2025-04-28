@@ -60,5 +60,20 @@ public class WebControllerTests {
     @DisplayName("Der Status der Login Seite nach login ist 302 FOUND")
     void test_05() throws Exception {
         mockMvc.perform(get("/login"))
-                .andExpect(status().isFound());    }
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    @DisplayName("Der Status der Kategorie Seite ist 200 OK")
+    void test_06() throws Exception {
+        mockMvc.perform(get("/Rad"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Für die Kategorie Seite wird die richtige View zurückgegeben.")
+    void test_07() throws Exception{
+        mockMvc.perform(get("/Rad"))
+                .andExpect(view().name("detail"));
+    }
 }
