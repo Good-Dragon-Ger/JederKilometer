@@ -3,6 +3,7 @@ package de.gooddragon.jederkilometer.adapter.web.controller;
 import de.gooddragon.jederkilometer.application.service.JederKilometerService;
 import de.gooddragon.jederkilometer.domain.model.Aufzeichnung;
 import de.gooddragon.jederkilometer.domain.model.Sportart;
+import de.gooddragon.jederkilometer.domain.model.Sportler;
 import de.gooddragon.jederkilometer.domain.model.Team;
 import de.gooddragon.jederkilometer.domain.model.strava.Navigation;
 import de.gooddragon.jederkilometer.domain.service.ActivityFilter;
@@ -102,7 +103,13 @@ public class WebController {
         List<Team> teams = service.alleTeams();
         List<String> names = new ArrayList<>();
         List<Double> km = new ArrayList<>();
+        List<Double> kmBar = new ArrayList<>();
         List<String[]> teamsArray = new ArrayList<>();
+        List<Sportler> sportler = new ArrayList<>();
+
+        for(Aufzeichnung tkm : aufzeichnungen) {
+            sportler.add(service.findeSportlerDurchId(tkm.name()));
+        }
 
         navigation.add(new Navigation("Home","/"));
         for(Sportart sportart : service.alleSportarten()) {
@@ -113,7 +120,17 @@ public class WebController {
         }
 
         for(Team team : teams) {
+            HashSet<UUID> member = new HashSet<>();
+            for (Sportler user : sportler) {
+                if (team.getId().equals(user.getTeam()) && user.getTeam() != null) {
+                    member.add(user.getId());
+                }
+            }
+            if (!member.isEmpty()) {
+                team.setMember(member);
+            }
             km.add(kmBerechnung.berechneGesamtKmTeam(aufzeichnungen, team.getMember()));
+            kmBar.add(kmBerechnung.berechneGesamtKmTeam(aufzeichnungen, team.getMember()));
             names.add(team.getName());
             String[] teamArray = new String[2];
             teamArray[0] = team.getName();
@@ -147,6 +164,8 @@ public class WebController {
         model.addAttribute("km", convertKM(kmBerechnung.berechneAktiveGesamtKm(aufzeichnungen,sportarten)));
         model.addAttribute("geld",  convertAmount(money));
         model.addAttribute("teams", teamsArray);
+        model.addAttribute("names", names.toArray());
+        model.addAttribute("kmBar", kmBar.toArray());
         return "detail";
     }
 

@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Controller
@@ -150,6 +152,18 @@ public class AdminController {
     public String teamVerwaltung(Model model) {
         List<Team> teams = service.alleTeams();
         model.addAttribute("alleTeams", teams);
+        List<Sportler> sportler = service.alleSportler();
+        for (Team team : teams) {
+            Set<UUID> member = new HashSet<>(team.getMember());
+            for (Sportler sport : sportler) {
+               if (team.getId().equals(sport.getTeam())) {
+                    member.add(sport.getTeam());
+                }
+            }
+            if (!member.isEmpty()) {
+                team.setMember(member);
+            }
+        }
         return "adminTeamVerwaltung";
     }
 
