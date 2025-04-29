@@ -207,7 +207,6 @@ main {
 }
 
 .grid-demo, .container-demo {
-    height: 12.5rem;
     font-size: x-large;
 }
 
@@ -216,9 +215,6 @@ main {
 .tile-grid-alternating-1-4 {
     display: grid;
     grid-gap: 1rem;
-    /*width: 100%;*/
-    margin-top: 5%;
-    margin-bottom: 10%;
 }
 
 .application {

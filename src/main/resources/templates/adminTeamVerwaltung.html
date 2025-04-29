@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width,
                    initial-scale=1.0">
-    <title>Teilnehmereinstellung</title>
+    <title>Userverwaltung</title>
 
     <link href="../static/css/bootstrap.min.css" rel="stylesheet"
           th:href="@{/css/bootstrap.min.css}">
@@ -16,36 +16,30 @@
 <body>
 <header role="banner" th:insert="~{fragments/header}">
 </header>
+<nav aria-label="Hauptnavigation" role="navigation" th:insert="~{fragments/adminNavigation}"></nav>
 
-<nav aria-label="Hauptnavigation" role="navigation" th:insert="~{fragments/adminNavigation}">
-</nav>
-
-<main role="main">
+<main>
     <article class="application">
-        <h1 id="headline">Userverwaltung</h1>
+        <h1 id="headline">Teamverwaltung</h1>
         <section class="row">
             <section class="col-lg-8">
                 <table class="table">
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Username</th>
-                        <th>Team</th>
+                        <th>User</th>
                     </tr>
                     </thead>
                     <tbody th:remove="all-but-first">
-                    <tr th:each="sportler:${alleSportler}">
+                    <tr th:each="team:${alleTeams}">
                         <td>
-                            <span th:text="${sportler.getName}">Raum 1</span>
+                            <span th:text="${team.getName}">Raum 1</span>
                         </td>
                         <td>
-                            <span th:text="${sportler.getUserName}"> 1 </span>
+                            <span th:text="${team.getMember()}"> 1 </span>
                         </td>
                         <td>
-                            <span th:text="${sportler.getTeam}"> 1 </span>
-                        </td>
-                        <td>
-                            <a class="btn btn-dark" th:href="@{/admin/user/{sportler}(sportler=${sportler.getId()})}">Bearbeiten</a>
+                            <a class="btn btn-dark">Bearbeiten</a>
                         </td>
                     </tr>
                     <tr>
@@ -70,11 +64,8 @@
                 <section class="alert alert-warning" id="error-message" th:if="${error} != null" th:text="${error}">
                     Some error message
                 </section>
-                <form method="post" th:action="@{/admin/user/neu}">
+                <form method="post" th:action="@{/admin/team/neu}">
                     <section class="lg-12">
-                        <label class="form-label" for="userName">User Name</label>
-                        <input class="form-control" id="userName" name="userName"
-                               type="text">
                         <label class="form-label" for="name">Name</label>
                         <input class="form-control" id="name" name="name"
                                type="text">
@@ -85,8 +76,7 @@
         </section>
     </article>
 </main>
-<footer class="footer" role="contentinfo" th:insert="~{fragments/footer}">
-</footer>
 
+<footer class="footer" role="contentinfo" th:insert="~{fragments/footer}"></footer>
 </body>
 </html>

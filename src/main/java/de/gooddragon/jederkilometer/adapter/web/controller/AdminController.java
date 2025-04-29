@@ -4,6 +4,7 @@ import de.gooddragon.jederkilometer.adapter.web.config.AdminOnly;
 import de.gooddragon.jederkilometer.application.service.JederKilometerService;
 import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
+import de.gooddragon.jederkilometer.domain.model.Team;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @AdminOnly
@@ -66,6 +68,43 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/user/{id}")
+    public String userUpdate(Model model, @PathVariable UUID id) {
+        Sportler sportler = service.findeSportlerDurchId(id);
+        List<Team> teams = service.alleTeams();
+        if(sportler == null) {
+            return "redirect:/admin/user";
+        }
+        model.addAttribute("sportler", sportler);
+        model.addAttribute("teams", teams);
+        return "adminEditUser";
+    }
+
+    @PostMapping("/user/{id}/update")
+    public String userUpdate(Model model,@PathVariable UUID id, @Valid Sportler sportler, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Benutzername oder Name bereits vergeben");
+            return "redirect:/admin/user/" + id;
+        }
+        Sportler athlete = service.findeSportlerDurchId(id);
+
+        if (athlete.getName().equals(sportler.getName())) {
+            model.addAttribute("form", sportler);
+            athlete.setUserName(sportler.getUserName());
+            athlete.setName(sportler.getName());
+            athlete.setTeam(sportler.getTeam());
+            service.speicherSportler(athlete);
+            redirectAttributes.addFlashAttribute("success", "Sportler erfolgreich updated");
+            return "redirect:/admin/user";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error", "Team ist voll");
+            return "redirect:/admin/user";
+        }
+
+
+    }
+
     @GetMapping("/sport")
     public String sportVerwaltung(Model model) {
         List<Sportart> sport = service.alleSportarten();
@@ -104,6 +143,34 @@ public class AdminController {
 
             redirectAttributes.addFlashAttribute("error", "Benutzername existiert bereits");
             return "redirect:/admin/sport";
+        }
+    }
+
+    @GetMapping("/team")
+    public String teamVerwaltung(Model model) {
+        List<Team> teams = service.alleTeams();
+        model.addAttribute("alleTeams", teams);
+        return "adminTeamVerwaltung";
+    }
+
+    @PostMapping("/team/neu")
+    public String teamNeu(Model model, @Valid Team team, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Benutzername oder Name bereits vergeben");
+            return "redirect:/admin/team";
+        }
+        var maybeTeam = service.alleTeams().stream()
+                .filter(user -> user.getName().equals(team.getName()))
+                .findAny();
+        if(maybeTeam.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Team existiert bereits");
+            return "redirect:/admin/team";
+        }
+        else {
+            model.addAttribute("form", team);
+            service.speicherTeam(team);
+            redirectAttributes.addFlashAttribute("success", "Team erfolgreich angelegt");
+            return "redirect:/admin/team";
         }
     }
 }

@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin</title>
     <link href="../static/css/bootstrap.min.css" rel="stylesheet"
           th:href="@{css/bootstrap.min.css}">
@@ -19,15 +20,21 @@
     <article class="application">
         <h1 id="headline">Jeder Kilometer zählt</h1>
         <h2>Gesamt</h2>
-        <div class="row main-skills">
-            <a class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/user}">
+        <div class="row main-skills tile-grid-sm">
+            <a class="btn btn-dark card-body grid-demo" th:href="@{/admin/user}">
                 Userverwaltung
             </a>
-            <a class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/activity}">
+            <a class="btn btn-dark card-body grid-demo" th:href="@{/admin/activity}">
                 Aktivitätsverwaltung
             </a>
-            <a class="btn btn-dark col-lg-4 card-body" th:href="@{/admin/sport}">
+            <a class="btn btn-dark card-body grid-demo" th:href="@{/admin/sport}">
                Sportartverwaltung
+            </a>
+            <a class="btn btn-dark card-body grid-demo" th:href="@{/admin/team}">
+                Teamverwaltung
+            </a>
+            <a class="btn btn-dark card-body grid-demo" th:href="@{/admin/event}">
+                Eventverwaltung
             </a>
         </div>
     </article>
