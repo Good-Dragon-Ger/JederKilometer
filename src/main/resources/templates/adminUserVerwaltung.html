@@ -23,7 +23,7 @@
 <main role="main">
     <article class="application">
         <h1 id="headline">Userverwaltung</h1>
-        <div class="row">
+        <section class="row">
             <section class="col-lg-8">
                 <table class="table">
                     <thead>
@@ -45,7 +45,7 @@
                             <span th:text="${sportler.getTeam}"> 1 </span>
                         </td>
                         <td>
-                            <a class="btn btn-dark">Bearbeiten</a>
+                            <a class="btn btn-dark" th:href="@{/admin/user/{sportler}(sportler=${sportler.getId()})}">Bearbeiten</a>
                         </td>
                     </tr>
                     <tr>
@@ -82,7 +82,7 @@
                     <input class="btn btn-dark" type="submit" value="Hinzufügen">
                 </form>
             </section>
-        </div>
+        </section>
     </article>
 </main>
 <footer class="footer" role="contentinfo" th:insert="~{fragments/footer}">
