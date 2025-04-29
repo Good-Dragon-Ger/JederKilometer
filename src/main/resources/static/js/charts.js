@@ -47,30 +47,25 @@ var CHARTS = CHARTS || (function () {
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     scales: {
-                        xAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            },
-
-                        }],
-                        x:{
+                        x: {
+                            beginAtZero: true,
                             title: {
                                 display: true,
                                 text: 'KM'
                             }
                         }
-
                     },
                     plugins: {
                         legend: {
                             display: false
                         }
-                    },
-                    indexAxis: 'y',
+                    }
                 }
             });
         },
+
         getPieChart: function () {
             var ctx = document.getElementById(id).getContext('2d');
             var pieChart = new Chart(ctx, {
@@ -107,10 +102,10 @@ var CHARTS = CHARTS || (function () {
                         legend: {
                             labels: {
                                 font: {
-                                    weight: 'bold'    // Fettgedruckt für bessere Lesbarkeit
+                                    weight: 'bold'
                                 },
-                                color: '#333',         // Dunkleres Grau für besseren Kontrast
-                                padding: 20             // Mehr Abstand zwischen den Einträgen
+                                color: '#333',
+                                padding: 20
                             }
                         }
                     },
@@ -122,11 +117,11 @@ var CHARTS = CHARTS || (function () {
                     },
                     elements: {
                         arc: {
-                            borderWidth: 2, // Schöner dünner Rand
+                            borderWidth: 2
                         }
                     },
-                    cutout: '40%', // macht aus Pie ein bisschen Donut-Style, wirkt edler
-                    radius: '70%' // Diagramm wird kleiner (default wäre 100%)
+                    cutout: '40%',
+                    radius: '70%'
                 }
             });
         },
