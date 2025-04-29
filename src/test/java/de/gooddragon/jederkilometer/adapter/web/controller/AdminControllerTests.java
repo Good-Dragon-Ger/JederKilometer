@@ -6,6 +6,7 @@ import de.gooddragon.jederkilometer.adapter.web.config.UserConfig;
 import de.gooddragon.jederkilometer.application.service.JederKilometerService;
 import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
+import de.gooddragon.jederkilometer.domain.model.Team;
 import de.gooddragon.jederkilometer.helper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -125,5 +126,36 @@ public class AdminControllerTests {
                 .with(csrf()));
 
         verify(service).speicherSportart(any(Sportart.class));
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Der Status der TeamVerwaltung ist 200 OK")
+    void test_10() throws Exception {
+        mockMvc.perform(get("/admin/team"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Für die TeamVerwaltung wird die richtige View zurück gegeben")
+    void test_11() throws Exception {
+        mockMvc.perform(get("/admin/team"))
+                .andExpect(view().name("adminTeamVerwaltung"));
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Ein Team kann hinzugefügt werden")
+    void test_12() throws Exception {
+        Team team = new Team("YokoRaiders");
+
+        when(service.alleTeams()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(post("/admin/team/neu")
+                .flashAttr("team", team)
+                .with(csrf()));
+
+        verify(service).speicherTeam(team);
     }
 }

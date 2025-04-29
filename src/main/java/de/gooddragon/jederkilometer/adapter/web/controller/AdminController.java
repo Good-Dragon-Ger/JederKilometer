@@ -4,6 +4,7 @@ import de.gooddragon.jederkilometer.adapter.web.config.AdminOnly;
 import de.gooddragon.jederkilometer.application.service.JederKilometerService;
 import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
+import de.gooddragon.jederkilometer.domain.model.Team;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -104,6 +105,34 @@ public class AdminController {
 
             redirectAttributes.addFlashAttribute("error", "Benutzername existiert bereits");
             return "redirect:/admin/sport";
+        }
+    }
+
+    @GetMapping("/team")
+    public String teamVerwaltung(Model model) {
+        List<Team> teams = service.alleTeams();
+        model.addAttribute("alleTeams", teams);
+        return "adminTeamVerwaltung";
+    }
+
+    @PostMapping("/team/neu")
+    public String teamNeu(Model model, @Valid Team team, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Benutzername oder Name bereits vergeben");
+            return "redirect:/admin/team";
+        }
+        var maybeTeam = service.alleTeams().stream()
+                .filter(user -> user.getName().equals(team.getName()))
+                .findAny();
+        if(maybeTeam.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Team existiert bereits");
+            return "redirect:/admin/team";
+        }
+        else {
+            model.addAttribute("form", team);
+            service.speicherTeam(team);
+            redirectAttributes.addFlashAttribute("success", "Team erfolgreich angelegt");
+            return "redirect:/admin/team";
         }
     }
 }

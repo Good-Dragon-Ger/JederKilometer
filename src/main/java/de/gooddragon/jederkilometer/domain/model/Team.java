@@ -30,6 +30,10 @@ public class Team {
         this(UUID.randomUUID(), name, new HashSet<>());
     }
 
+    public Team() {
+        this(UUID.randomUUID(), null, new HashSet<>());
+    }
+
     public UUID getId() {
         return id;
     }
