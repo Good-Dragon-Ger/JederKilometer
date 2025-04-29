@@ -155,4 +155,8 @@ public class JederKilometerService {
 
     public List<Sportart> findeSportartDurchKategorie(String kategorie) {
         return sportRepository.findByCategory(kategorie);    }
+
+    public Sportler findeSportlerDurchId(UUID id) {
+        return userRepository.findByUuid(id);
+    }
 }

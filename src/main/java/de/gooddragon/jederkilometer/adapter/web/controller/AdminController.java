@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @AdminOnly
@@ -65,6 +66,43 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("success", "Benutzer erfolgreich angelegt");
             return "redirect:/admin/user";
         }
+    }
+
+    @GetMapping("/user/{id}")
+    public String userUpdate(Model model, @PathVariable UUID id) {
+        Sportler sportler = service.findeSportlerDurchId(id);
+        List<Team> teams = service.alleTeams();
+        if(sportler == null) {
+            return "redirect:/admin/user";
+        }
+        model.addAttribute("sportler", sportler);
+        model.addAttribute("teams", teams);
+        return "adminEditUser";
+    }
+
+    @PostMapping("/user/{id}/update")
+    public String userUpdate(Model model,@PathVariable UUID id, @Valid Sportler sportler, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Benutzername oder Name bereits vergeben");
+            return "redirect:/admin/user/" + id;
+        }
+        Sportler athlete = service.findeSportlerDurchId(id);
+
+        if (athlete.getName().equals(sportler.getName())) {
+            model.addAttribute("form", sportler);
+            athlete.setUserName(sportler.getUserName());
+            athlete.setName(sportler.getName());
+            athlete.setTeam(sportler.getTeam());
+            service.speicherSportler(athlete);
+            redirectAttributes.addFlashAttribute("success", "Sportler erfolgreich updated");
+            return "redirect:/admin/user";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error", "Team ist voll");
+            return "redirect:/admin/user";
+        }
+
+
     }
 
     @GetMapping("/sport")
