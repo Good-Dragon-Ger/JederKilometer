@@ -6,6 +6,7 @@ import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
 import de.gooddragon.jederkilometer.domain.model.Team;
 import de.gooddragon.jederkilometer.domain.model.strava.HashMapDaten;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class JederKilometerService {
     private final SportRepository sportRepository;
     private final TeamsRepository teamsRepository;
     private final UserRepository userRepository;
+    private final EventTimeRepository eventTimeRepository;
     private final JederKilometerService self;
 
     public JederKilometerService(ActivityRepository activityRepository,
@@ -29,12 +31,14 @@ public class JederKilometerService {
                                  SportRepository sportRepository,
                                  TeamsRepository teamsRepository,
                                  UserRepository userRepository,
+                                 EventTimeRepository eventTimeRepository,
                                  @Lazy JederKilometerService self){
         this.activityRepository = activityRepository;
         this.hashDataRepository = hashDataRepository;
         this.sportRepository = sportRepository;
         this.teamsRepository = teamsRepository;
         this.userRepository = userRepository;
+        this.eventTimeRepository = eventTimeRepository;
         this.self = self;
     }
 
@@ -158,5 +162,23 @@ public class JederKilometerService {
 
     public Sportler findeSportlerDurchId(UUID id) {
         return userRepository.findByUuid(id);
+    }
+
+    public List<Zeitraum> alleEvents() {
+        return eventTimeRepository.findAll();
+    }
+
+    @Transactional
+    public void speicherZeitraum(Zeitraum zeitraum) {
+        try {
+            self.saveZeitraum(zeitraum);
+        }
+        catch (Exception e) {
+            System.err.println("Kann Zeitraum nicht speichern");
+        }
+    }
+
+    public void saveZeitraum(Zeitraum zeitraum) {
+        eventTimeRepository.save(zeitraum);
     }
 }

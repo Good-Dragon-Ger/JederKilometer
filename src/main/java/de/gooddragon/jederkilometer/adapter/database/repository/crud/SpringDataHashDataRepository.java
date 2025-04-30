@@ -11,4 +11,6 @@ public interface SpringDataHashDataRepository extends CrudRepository<HashData, L
     List<HashData> findAll();
 
     Optional<HashData> findByHash(int hash);
+
+    HashData save(HashData hashData);
 }

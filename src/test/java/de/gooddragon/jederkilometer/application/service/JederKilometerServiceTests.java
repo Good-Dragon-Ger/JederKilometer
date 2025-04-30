@@ -6,6 +6,7 @@ import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
 import de.gooddragon.jederkilometer.domain.model.Team;
 import de.gooddragon.jederkilometer.domain.model.strava.HashMapDaten;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ class JederKilometerServiceTests {
     SportRepository sportRepository = mock(SportRepository.class);
     TeamsRepository teamsRepository = mock(TeamsRepository.class);
     UserRepository userRepository = mock(UserRepository.class);
+    EventTimeRepository eventTimeRepository = mock(EventTimeRepository.class);
     JederKilometerService self = mock(JederKilometerService.class);
     JederKilometerService service;
 
@@ -35,7 +37,7 @@ class JederKilometerServiceTests {
 
     @BeforeEach
     void setUp() {
-        service = new JederKilometerService(activityRepository, hashDataRepository, sportRepository, teamsRepository, userRepository, self);
+        service = new JederKilometerService(activityRepository, hashDataRepository, sportRepository, teamsRepository, userRepository, eventTimeRepository, self);
         id = UUID.randomUUID();
     }
 
@@ -159,4 +161,34 @@ class JederKilometerServiceTests {
         assertThat(userRepository.findAll().size()).isEqualTo(2);
     }
 
+    @Test
+    @DisplayName("Wir können Zeiträume hinzufügen")
+    void test_11() {
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusDays(1);
+
+        Zeitraum zeitraum = new Zeitraum(id, start, end);
+        when(eventTimeRepository.save(any())).thenReturn(zeitraum);
+
+        service.saveZeitraum(zeitraum);
+
+        ArgumentCaptor<Zeitraum> captor = ArgumentCaptor.forClass(Zeitraum.class);
+        verify(eventTimeRepository).save(captor.capture());
+        Zeitraum savedHashMapDaten = captor.getValue();
+        assertThat(savedHashMapDaten.getId()).isEqualTo(zeitraum.getId());
+    }
+
+    @Test
+    @DisplayName("Wir können Zeiträume laden")
+    void test_12() {
+
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusDays(1);
+
+        Zeitraum zeitraum1 = new Zeitraum(id, start, end);
+        Zeitraum zeitraum2 = new Zeitraum(id, start.minusDays(1), end);
+        when(eventTimeRepository.findAll()).thenReturn(List.of(zeitraum1, zeitraum2));
+
+        assertThat(eventTimeRepository.findAll().size()).isEqualTo(2);
+    }
 }

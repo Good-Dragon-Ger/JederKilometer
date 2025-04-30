@@ -2,6 +2,7 @@ package de.gooddragon.jederkilometer.domain.service;
 
 import de.gooddragon.jederkilometer.domain.model.Aufzeichnung;
 import de.gooddragon.jederkilometer.domain.model.Sportart;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,12 @@ public class ActivityFilter {
 
         return activities.stream()
                 .filter(aufzeichnung -> aktiveSportartIds.contains(aufzeichnung.sportart()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Aufzeichnung> filterActivitiesByEventTime(List<Aufzeichnung> activities, Zeitraum zeitraum) {
+        return activities.stream()
+                .filter(aufzeichnung -> !aufzeichnung.datum().isBefore(zeitraum.getStartDate()) && !aufzeichnung.datum().isAfter(zeitraum.getEndDate()))
                 .collect(Collectors.toList());
     }
 }
