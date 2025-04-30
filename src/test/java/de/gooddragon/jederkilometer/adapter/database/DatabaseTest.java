@@ -8,6 +8,7 @@ import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
 import de.gooddragon.jederkilometer.domain.model.Team;
 import de.gooddragon.jederkilometer.domain.model.strava.HashMapDaten;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,12 +38,15 @@ public class DatabaseTest {
     SpringDataTeamsRepository dataTeamsRepository;
     @Autowired
     SpringDataUserRepository dataUserRepository;
+    @Autowired
+    SpringDataEventTimeRepository dataEventTimeRepository;
 
     ActivityRepository activityRepository;
     HashDataRepository hashDataRepository;
     SportRepository sportRepository;
     TeamsRepository teamsRepository;
     UserRepository userRepository;
+    EventTimeRepository eventTimeRepository;
 
 
     @BeforeEach
@@ -52,6 +56,7 @@ public class DatabaseTest {
         sportRepository = new SportRepositoryImpl(dataSportRepository);
         teamsRepository = new TeamsRepositoryImpl(dataTeamsRepository);
         userRepository = new UserRepositoryImpl(dataUserRepository);
+        eventTimeRepository = new EventTimeRepositoryImpl(dataEventTimeRepository);
     }
 
     @Test
@@ -141,6 +146,24 @@ public class DatabaseTest {
     @DisplayName("Wenn es mehrere HashData gibt, werden alle gefunden")
     @Sql("findAllHashData.sql")
     void test_10() {
+        List<HashMapDaten> all = hashDataRepository.findAll();
+        assertThat(all).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("EventTimes können hinzugefügt und geladen werden")
+    void Test_11() {
+        Zeitraum zeitraum = new Zeitraum(UUID.randomUUID(), LocalDate.now(), LocalDate.now().plusDays(1));
+        Zeitraum saved = eventTimeRepository.save(zeitraum);
+        assertThat(saved.getId()).isEqualTo(zeitraum.getId());
+        assertThat(saved.getStartDate()).isEqualTo(zeitraum.getStartDate());
+        assertThat(saved.getEndDate()).isEqualTo(zeitraum.getEndDate());
+    }
+
+    @Test
+    @DisplayName("Wenn es mehrere EventTimes gibt, werden alle gefunden")
+    @Sql("findAllHashData.sql")
+    void test_12() {
         List<HashMapDaten> all = hashDataRepository.findAll();
         assertThat(all).hasSize(3);
     }

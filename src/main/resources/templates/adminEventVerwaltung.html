@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0">
+    <title>Eventverwaltung</title>
+
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"
+          th:href="@{/css/bootstrap.min.css}">
+    <link href="../static/css/jederKilometer.css" rel="stylesheet"
+          th:href="@{/css/jederKilometer.css}">
+
+</head>
+<body>
+<header role="banner" th:insert="~{fragments/header}">
+</header>
+<nav aria-label="Hauptnavigation" role="navigation" th:insert="~{fragments/adminNavigation}"></nav>
+
+<main>
+    <article class="application">
+        <h1 id="headline">Eventverwaltung</h1>
+        <section class="row">
+            <section class="col-lg-8">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Startdatum</th>
+                        <th>Enddatum</th>
+                    </tr>
+                    </thead>
+                    <tbody th:remove="all-but-first">
+                    <tr th:each="event:${alleEvents}">
+                        <td>
+                            <span th:text="${event.getStartDate()}">Raum 1</span>
+                        </td>
+                        <td>
+                            <span th:text="${event.getEndDate()}"> 1 </span>
+                        </td>
+                        <td>
+                            <!--<a class="btn btn-dark">Bearbeiten</a>-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Raum 2</span>
+                        </td>
+                        <td>
+                            <span> 2 </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Raum 3</span>
+                        </td>
+                        <td>
+                            <span> 3 </span>
+                        </td>
+                    </tbody>
+                </table>
+            </section>
+            <section class="col-lg-4">
+                <section class="alert alert-warning" id="error-message" th:if="${error} != null" th:text="${error}">
+                    Some error message
+                </section>
+                <form method="post" th:action="@{/admin/event/neu}">
+                    <section class="lg-12">
+                        <label class="form-label" for="startDate">Startdatum</label>
+                        <input class="form-control" id="startDate" name="startDate"
+                               type="date">
+                        <label class="form-label" for="endDate">Enddatum</label>
+                        <input class="form-control" id="endDate" name="endDate"
+                               type="date">
+                    </section>
+                    <input class="btn btn-dark" type="submit" value="Hinzufügen">
+                </form>
+            </section>
+        </section>
+    </article>
+</main>
+
+<footer class="footer" role="contentinfo" th:insert="~{fragments/footer}"></footer>
+</body>
+</html>

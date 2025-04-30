@@ -7,6 +7,7 @@ import de.gooddragon.jederkilometer.application.service.JederKilometerService;
 import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
 import de.gooddragon.jederkilometer.domain.model.Team;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 import de.gooddragon.jederkilometer.helper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -157,5 +159,36 @@ public class AdminControllerTests {
                 .with(csrf()));
 
         verify(service).speicherTeam(team);
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Der Status der EventVerwaltung ist 200 OK")
+    void test_13() throws Exception {
+        mockMvc.perform(get("/admin/event"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Für die EventVerwaltung wird die richtige View zurück gegeben")
+    void test_14() throws Exception {
+        mockMvc.perform(get("/admin/event"))
+                .andExpect(view().name("adminEventVerwaltung"));
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Max Mustermann", roles = {"USER", "ADMIN"})
+    @DisplayName("Ein Zeitraum kann hinzugefügt werden")
+    void test_15() throws Exception {
+        Zeitraum zeitraum = new Zeitraum(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
+
+        when(service.alleTeams()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(post("/admin/event/neu")
+                .flashAttr("zeitraum", zeitraum)
+                .with(csrf()));
+
+        verify(service).speicherZeitraum(zeitraum);
     }
 }

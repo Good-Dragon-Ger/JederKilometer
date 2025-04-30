@@ -5,6 +5,7 @@ import de.gooddragon.jederkilometer.application.service.JederKilometerService;
 import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
 import de.gooddragon.jederkilometer.domain.model.Team;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,14 +61,13 @@ public class AdminController {
                 .findAny();
         if(maybeUser.isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Benutzername existiert bereits");
-            return "redirect:/admin/user";
         }
         else {
             model.addAttribute("form", sportler);
             service.speicherSportler(sportler);
             redirectAttributes.addFlashAttribute("success", "Benutzer erfolgreich angelegt");
-            return "redirect:/admin/user";
         }
+        return "redirect:/admin/user";
     }
 
     @GetMapping("/user/{id}")
@@ -90,19 +90,18 @@ public class AdminController {
         }
         Sportler athlete = service.findeSportlerDurchId(id);
 
-        if (athlete.getName().equals(sportler.getName())) {
+        if(athlete.getName().equals(sportler.getName())) {
             model.addAttribute("form", sportler);
             athlete.setUserName(sportler.getUserName());
             athlete.setName(sportler.getName());
             athlete.setTeam(sportler.getTeam());
             service.speicherSportler(athlete);
             redirectAttributes.addFlashAttribute("success", "Sportler erfolgreich updated");
-            return "redirect:/admin/user";
         }
         else {
             redirectAttributes.addFlashAttribute("error", "Team ist voll");
-            return "redirect:/admin/user";
         }
+        return "redirect:/admin/user";
 
 
     }
@@ -139,13 +138,12 @@ public class AdminController {
             sport.setAktiv(sportart.getAktiv());
             service.speicherSportart(sport);
             redirectAttributes.addFlashAttribute("success", "Sportart erfolgreich updated");
-            return "redirect:/admin/sport";
         }
         else {
 
             redirectAttributes.addFlashAttribute("error", "Benutzername existiert bereits");
-            return "redirect:/admin/sport";
         }
+        return "redirect:/admin/sport";
     }
 
     @GetMapping("/team")
@@ -170,7 +168,7 @@ public class AdminController {
     @PostMapping("/team/neu")
     public String teamNeu(Model model, @Valid Team team, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Benutzername oder Name bereits vergeben");
+            redirectAttributes.addFlashAttribute("error", "Team bereits vergeben");
             return "redirect:/admin/team";
         }
         var maybeTeam = service.alleTeams().stream()
@@ -178,13 +176,40 @@ public class AdminController {
                 .findAny();
         if(maybeTeam.isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Team existiert bereits");
-            return "redirect:/admin/team";
         }
         else {
             model.addAttribute("form", team);
             service.speicherTeam(team);
             redirectAttributes.addFlashAttribute("success", "Team erfolgreich angelegt");
-            return "redirect:/admin/team";
         }
+        return "redirect:/admin/team";
+    }
+
+    @GetMapping("/event")
+    public String adminEventVerwaltung(Model model) {
+        List<Zeitraum> events = service.alleEvents();
+        model.addAttribute("alleEvents", events);
+        return "adminEventVerwaltung";
+    }
+
+    @PostMapping("/event/neu")
+    public String newEvent(Model model, @Valid Zeitraum zeitraum, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error","Zeitraum schon vorhanden");
+            return "redirect:/admin/event";
+        }
+
+        var maybeZeitraum = service.alleEvents().stream()
+                .filter(event -> event.getStartDate().equals(zeitraum.getStartDate()) && event.getEndDate().equals(zeitraum.getEndDate()))
+                .findAny();
+        if(maybeZeitraum.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Zeitraum existiert bereits");
+        }
+        else {
+            model.addAttribute("form", zeitraum);
+            service.speicherZeitraum(zeitraum);
+            redirectAttributes.addFlashAttribute("success", "Zeitraum erfolgreich angelegt");
+        }
+        return "redirect:/admin/event";
     }
 }
