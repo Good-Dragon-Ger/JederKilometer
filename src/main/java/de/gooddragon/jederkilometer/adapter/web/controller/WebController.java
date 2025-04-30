@@ -123,6 +123,7 @@ public class WebController {
         Set<String> category = new HashSet<>();
         List<Navigation> navigation = new ArrayList<>();
         List<Aufzeichnung> aufzeichnungen = service.findeAufzeichnungenDurchKategorie(kategorie);
+        List<Aufzeichnung> eventAufzeichnungen = new ArrayList<>();
         List<Sportart> sportarten = service.findeSportartDurchKategorie(kategorie);
         List<Team> teams = service.alleTeams();
         List<String> names = new ArrayList<>();
@@ -130,8 +131,29 @@ public class WebController {
         List<Double> kmBar = new ArrayList<>();
         List<String[]> teamsArray = new ArrayList<>();
         List<Sportler> sportler = new ArrayList<>();
+        Zeitraum zeitraum;
 
-        for(Aufzeichnung tkm : aufzeichnungen) {
+        if (!aufzeichnungen.isEmpty()) {
+            if(service.alleEvents().isEmpty()) {
+                LocalDate start = aufzeichnungen.getFirst().datum().withDayOfMonth(1);
+                LocalDate end = aufzeichnungen.getLast().datum().withDayOfMonth(1);
+                for(Aufzeichnung aufzeichnung : aufzeichnungen) {
+                    if (aufzeichnung.datum().isBefore(start)) {
+                        start = aufzeichnung.datum();
+                    }
+                    if (aufzeichnung.datum().isAfter(end)) {
+                        end = aufzeichnung.datum();
+                    }
+                }
+                zeitraum = new Zeitraum(start, end);
+            }
+            else {
+                zeitraum = service.alleEvents().getLast();
+            }
+            eventAufzeichnungen = filter.filterActivitiesByEventTime(aufzeichnungen, zeitraum);
+        }
+
+        for(Aufzeichnung tkm : eventAufzeichnungen) {
             sportler.add(service.findeSportlerDurchId(tkm.name()));
         }
 
@@ -153,8 +175,8 @@ public class WebController {
             if (!member.isEmpty()) {
                 team.setMember(member);
             }
-            km.add(kmBerechnung.berechneGesamtKmTeam(aufzeichnungen, team.getMember()));
-            kmBar.add(kmBerechnung.berechneGesamtKmTeam(aufzeichnungen, team.getMember()));
+            km.add(kmBerechnung.berechneGesamtKmTeam(eventAufzeichnungen, team.getMember()));
+            kmBar.add(kmBerechnung.berechneGesamtKmTeam(eventAufzeichnungen, team.getMember()));
             names.add(team.getName());
             String[] teamArray = new String[2];
             teamArray[0] = team.getName();
@@ -180,12 +202,12 @@ public class WebController {
         double money = 0.0;
 
         for(Sportart sportart : sportarten) {
-            money += priceOfKM(kmBerechnung.berechneGesamtKmProSportart(aufzeichnungen, sportart.getId()),sportart.getPreis());
+            money += priceOfKM(kmBerechnung.berechneGesamtKmProSportart(eventAufzeichnungen, sportart.getId()),sportart.getPreis());
         }
 
         model.addAttribute("sport", kategorie);
         model.addAttribute("nav", navigation);
-        model.addAttribute("km", convertKM(kmBerechnung.berechneAktiveGesamtKm(aufzeichnungen,sportarten)));
+        model.addAttribute("km", convertKM(kmBerechnung.berechneAktiveGesamtKm(eventAufzeichnungen,sportarten)));
         model.addAttribute("geld",  convertAmount(money));
         model.addAttribute("teams", teamsArray);
         model.addAttribute("names", names.toArray());
