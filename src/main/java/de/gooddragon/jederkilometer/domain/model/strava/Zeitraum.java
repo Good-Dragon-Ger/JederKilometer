@@ -19,6 +19,10 @@ public class Zeitraum {
         this(UUID.randomUUID(), startDate, endDate);
     }
 
+    public Zeitraum() {
+        this(UUID.randomUUID(), null, null);
+    }
+
     public UUID getId() {
         return id;
     }
