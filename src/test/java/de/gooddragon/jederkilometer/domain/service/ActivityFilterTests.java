@@ -1,6 +1,7 @@
 package de.gooddragon.jederkilometer.domain.service;
 
 import de.gooddragon.jederkilometer.domain.model.Aufzeichnung;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -47,5 +48,24 @@ public class ActivityFilterTests {
 
         assertThat(result).hasSize(1);
         assertThat(result.getFirst().sportart()).isEqualTo(sportart1);
+    }
+
+    @Test
+    @DisplayName("Filtert Aktivitäten nach Zeitraum")
+    void test_03() {
+        UUID zeit1 = UUID.randomUUID();
+        UUID zeit2 = UUID.randomUUID();
+
+        Zeitraum zeitraum = new Zeitraum(LocalDate.now(), LocalDate.now().plusDays(1));
+
+        List<Aufzeichnung> activities = Arrays.asList(
+                new Aufzeichnung(zeit1, UUID.randomUUID(), 12.5, LocalDate.now(), UUID.randomUUID()),
+                new Aufzeichnung(zeit2, UUID.randomUUID(),7.5, LocalDate.now().plusMonths(1), UUID.randomUUID())
+        );
+
+        List<Aufzeichnung> result = activityFilter.filterActivitiesByEventTime(activities, zeitraum);
+
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst().id()).isEqualTo(zeit1);
     }
 }

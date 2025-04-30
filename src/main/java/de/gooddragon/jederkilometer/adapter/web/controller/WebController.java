@@ -6,6 +6,7 @@ import de.gooddragon.jederkilometer.domain.model.Sportart;
 import de.gooddragon.jederkilometer.domain.model.Sportler;
 import de.gooddragon.jederkilometer.domain.model.Team;
 import de.gooddragon.jederkilometer.domain.model.strava.Navigation;
+import de.gooddragon.jederkilometer.domain.model.strava.Zeitraum;
 import de.gooddragon.jederkilometer.domain.service.ActivityFilter;
 import de.gooddragon.jederkilometer.domain.service.KMBerechnung;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -42,6 +44,28 @@ public class WebController {
         List<Sportart> aktiv = new ArrayList<>();
         HashMap<String, Set<UUID>> kategorie = new HashMap<>();
         List<Navigation> navigation = new ArrayList<>();
+        List<Aufzeichnung> eventAufzeichnungen = new ArrayList<>();
+        Zeitraum zeitraum;
+
+        if (!aufzeichnungen.isEmpty()) {
+            if(service.alleEvents().isEmpty()) {
+                LocalDate start = aufzeichnungen.getFirst().datum().withDayOfMonth(1);
+                LocalDate end = aufzeichnungen.getLast().datum().withDayOfMonth(1);
+                for(Aufzeichnung aufzeichnung : aufzeichnungen) {
+                    if (aufzeichnung.datum().isBefore(start)) {
+                        start = aufzeichnung.datum();
+                    }
+                    if (aufzeichnung.datum().isAfter(end)) {
+                        end = aufzeichnung.datum();
+                    }
+                }
+                zeitraum = new Zeitraum(start, end);
+            }
+            else {
+                zeitraum = service.alleEvents().getLast();
+            }
+            eventAufzeichnungen = filter.filterActivitiesByEventTime(aufzeichnungen, zeitraum);
+        }
         double money = 0.0;
         List<Double> kmPie = new ArrayList<>();
 
@@ -62,30 +86,30 @@ public class WebController {
         }
         //navigation.add("Archive");
 
-        for(Aufzeichnung aufzeichnung : aufzeichnungen) {
+        for(Aufzeichnung aufzeichnung : eventAufzeichnungen) {
             Sportart art = service.findeSportartDurchId(aufzeichnung.sportart());
             if (art.getAktiv()) {
                 if (!labelsBar.contains(aufzeichnung.datum().format(formatter))) {
                     labelsBar.add(aufzeichnung.datum().format(formatter));
                     kmBar.add(kmBerechnung.berechneGesamtKmProTag(
-                            filter.filterActivitiesByActiveSportart(aufzeichnungen,
+                            filter.filterActivitiesByActiveSportart(eventAufzeichnungen,
                             aktiv), aufzeichnung.datum()));
                 }
                 sportarten.add(aufzeichnung.sportart());
                 Sportart sportart = service.findeSportartDurchId(aufzeichnung.sportart());
                 if (sportart != null && !labelsPie.contains(sportart.getKategorie())) {
                     labelsPie.add(sportart.getKategorie());
-                    kmPie.add(kmBerechnung.berechneGesamtKmProKategorie(aufzeichnungen, kategorie.get(sportart.getKategorie())));
+                    kmPie.add(kmBerechnung.berechneGesamtKmProKategorie(eventAufzeichnungen, kategorie.get(sportart.getKategorie())));
                 }
             }
         }
 
         for(UUID sportart : sportarten.stream().toList()) {
-            money += priceOfKM(kmBerechnung.berechneGesamtKmProSportart(aufzeichnungen, sportart),service.findeSportartDurchId(sportart).getPreis());
+            money += priceOfKM(kmBerechnung.berechneGesamtKmProSportart(eventAufzeichnungen, sportart),service.findeSportartDurchId(sportart).getPreis());
         }
 
         model.addAttribute("nav", navigation);
-        model.addAttribute("km", convertKM(kmBerechnung.berechneAktiveGesamtKm(aufzeichnungen,aktiv)));
+        model.addAttribute("km", convertKM(kmBerechnung.berechneAktiveGesamtKm(eventAufzeichnungen,aktiv)));
         model.addAttribute("geld",  convertAmount(money));
         model.addAttribute("dataPie", kmPie.toArray());
         model.addAttribute("labelsPie", labelsPie.toArray());
