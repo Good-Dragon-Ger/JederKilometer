@@ -24,4 +24,8 @@ public record EventAufzeichnung(Athlete athlete,
     public int hashCode() {
         return Objects.hash(athlete, name, distance, moving_time, elapsed_time, total_elevation_gain, sport_type, workout_type);
     }
+
+    public int hashCode2() {
+        return Objects.hash(athlete, distance, moving_time, elapsed_time, total_elevation_gain, sport_type);
+    }
 }

@@ -76,16 +76,13 @@ public class StravaService {
 
     private List<EventAufzeichnung> getActivities() {
         try{
-            List<EventAufzeichnung> clubActivity = webClient.get()
+            return webClient.get()
                     .uri("/clubs/" + clubId + "/activities?page=" + page + "&per_page=" + perPage)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .retrieve()
                     .bodyToFlux(EventAufzeichnung.class)
                     .collectList()
                     .block(Duration.of(3, ChronoUnit.SECONDS));
-            assert clubActivity != null;
-            clubActivity.forEach(System.err::println);
-            return clubActivity;
         } catch (Exception e) {
             System.err.println("Error fetching activities from Strava: " + e.getMessage());
             tokenExpired = true;
@@ -98,11 +95,12 @@ public class StravaService {
         if (!sportler.isEmpty()) {
             for (EventAufzeichnung activity : activities) {
                 HashMapDaten hash = new HashMapDaten(activity.hashCode(),true);
-                if(activitiesHash.get(hash.hash()) == null) {
+                HashMapDaten hash2 = new HashMapDaten(activity.hashCode2(), true);
+                if(activitiesHash.get(hash.hash()) == null && activitiesHash.get(hash2.hash())) {
                     Sportler user = service.alleSportlerMitUsername(activity.athlete().firstname()+ " "+ activity.athlete().lastname());
                     if (user != null) {
-                        activitiesHash.put(hash.hash(), hash.value());
-                        service.speicherHash(hash);
+                        activitiesHash.put(hash2.hash(), hash.value());
+                        service.speicherHash(hash2);
                         service.speicherAufzeichnung(convertToAufzeichnung(activity));
                         System.err.println("save to database: " + activity);
                     }
