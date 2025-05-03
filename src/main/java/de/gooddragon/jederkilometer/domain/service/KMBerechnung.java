@@ -49,4 +49,11 @@ public class KMBerechnung {
                 .mapToDouble(Aufzeichnung::km)
                 .sum();
     }
+
+    public double berechneGesamtKmProUser(List<Aufzeichnung> activities, UUID user) {
+        return activities.stream()
+                .filter(aufzeichnung -> aufzeichnung.name().equals(user))
+                .mapToDouble(Aufzeichnung::km)
+                .sum();
+    }
 }

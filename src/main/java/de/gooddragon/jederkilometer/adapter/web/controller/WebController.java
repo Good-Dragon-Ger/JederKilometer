@@ -45,6 +45,9 @@ public class WebController {
         HashMap<String, Set<UUID>> kategorie = new HashMap<>();
         List<Navigation> navigation = new ArrayList<>();
         List<Aufzeichnung> eventAufzeichnungen = new ArrayList<>();
+        List<String[]> userBar = new ArrayList<>();
+        List<String> labelsUserBar = new ArrayList<>();
+        List<Double> kmUserBar = new ArrayList<>();
         Zeitraum zeitraum;
 
         if (!aufzeichnungen.isEmpty()) {
@@ -66,6 +69,29 @@ public class WebController {
             }
             eventAufzeichnungen = filter.filterActivitiesByEventTime(aufzeichnungen, zeitraum);
         }
+
+        for (Sportler sportler: service.alleSportler()) {
+            String[] sportlerKm = new String[2];
+            Double km = kmBerechnung.berechneGesamtKmProUser(eventAufzeichnungen, sportler.getId());
+            if (km > 0.0) {
+                sportlerKm[0] = sportler.getName();
+                sportlerKm[1] = String.valueOf(km);
+                userBar.add(sportlerKm);
+            }
+        }
+
+        if (!userBar.isEmpty()) {
+            sortList(userBar);
+            for (String[] user : userBar) {
+                labelsUserBar.add(user[0]);
+                kmUserBar.add(Double.parseDouble(user[1]));
+            }
+            userBar.forEach(user -> user[1] = convertKM(Double.parseDouble(user[1])));
+        }
+
+
+
+
         double money = 0.0;
         List<Double> kmPie = new ArrayList<>();
 
@@ -115,6 +141,8 @@ public class WebController {
         model.addAttribute("labelsPie", labelsPie.toArray());
         model.addAttribute("dataBar", kmBar.toArray());
         model.addAttribute("labelsBar", labelsBar.toArray());
+        model.addAttribute("dataUserBar", kmUserBar.toArray());
+        model.addAttribute("labelsUserBar", labelsUserBar.toArray());
         return "index";
     }
 
@@ -175,9 +203,12 @@ public class WebController {
             if (!member.isEmpty()) {
                 team.setMember(member);
             }
+            double teamKm = kmBerechnung.berechneGesamtKmTeam(eventAufzeichnungen, team.getMember());
             km.add(kmBerechnung.berechneGesamtKmTeam(eventAufzeichnungen, team.getMember()));
-            kmBar.add(kmBerechnung.berechneGesamtKmTeam(eventAufzeichnungen, team.getMember()));
-            names.add(team.getName());
+            if ( teamKm != 0) {
+                kmBar.add(teamKm);
+                names.add(team.getName());
+            }
             String[] teamArray = new String[2];
             teamArray[0] = team.getName();
             teamArray[1] = km.getLast().toString();
@@ -186,13 +217,9 @@ public class WebController {
 
         if (!teamsArray.isEmpty()) {
 
-            teamsArray.sort((a, b) -> {
-                double kmA = Double.parseDouble(a[1]);
-                double kmB = Double.parseDouble(b[1]);
-                return Double.compare(kmB, kmA);
-            });
+            sortList(teamsArray);
 
-            teamsArray.forEach(team -> team[1] = convertKM(Double.parseDouble(team[1])));
+            teamsArray.forEach(ukm -> ukm[1] = convertKM(Double.parseDouble(ukm[1])));
 
             if(teamsArray.size() > 3) {
                 teamsArray = teamsArray.subList(0, 3);
@@ -243,5 +270,13 @@ public class WebController {
         Locale de = Locale.GERMANY;
         NumberFormat kmFormat = NumberFormat.getNumberInstance(de);
         return kmFormat.format(km);
+    }
+
+    private void sortList(List<String[]> sortBar) {
+        sortBar.sort((a, b) -> {
+            double kmA = Double.parseDouble(a[1]);
+            double kmB = Double.parseDouble(b[1]);
+            return Double.compare(kmB, kmA);
+        });
     }
 }
