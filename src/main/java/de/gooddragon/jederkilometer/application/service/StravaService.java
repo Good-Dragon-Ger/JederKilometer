@@ -96,7 +96,7 @@ public class StravaService {
             for (EventAufzeichnung activity : activities) {
                 HashMapDaten hash = new HashMapDaten(activity.hashCode(),true);
                 HashMapDaten hash2 = new HashMapDaten(activity.hashCode2(), true);
-                if(activitiesHash.get(hash.hash()) == null && activitiesHash.get(hash2.hash())) {
+                if(activitiesHash.get(hash.hash()) == null && activitiesHash.get(hash2.hash()) == null) {
                     Sportler user = service.alleSportlerMitUsername(activity.athlete().firstname()+ " "+ activity.athlete().lastname());
                     if (user != null) {
                         activitiesHash.put(hash2.hash(), hash.value());

@@ -23,7 +23,7 @@
     <article class="application">
         <h1 id="headline">Jeder Kilometer zählt</h1>
         <h2>Gesamt</h2>
-        <div class="row main-skills tile-grid-sm">
+        <section class="row main-skills tile-grid-sm">
             <section class="card-body grid-demo">
                 <i class="fas fa-laptop-code"></i>
                 <h3 class="card-subtitle">Gesamt KM</h3>
@@ -34,8 +34,8 @@
                 <h3 class="card-subtitle">Gesamte Summe</h3>
                 <p class="card-text" th:text="${geld}">150.00€</p>
             </section>
-        </div>
-        <div class="row chart chart-position">
+        </section>
+        <section class="row chart chart-position">
             <canvas class="charts" id="pieChart"></canvas>
             <script th:inline="javascript" type="text/javascript">
                 CHARTS.init('pieChart','2d');
@@ -50,7 +50,14 @@
                 CHARTS.setLabels([[${labelsBar}]]);
                 CHARTS.getHorizontalBarChart();
             </script>
-        </div>
+            <canvas class="charts" id="userChart"></canvas>
+            <script th:inline="javascript" type="text/javascript">
+                CHARTS.init('userChart','2d');
+                CHARTS.setData([[${dataUserBar}]]);
+                CHARTS.setLabels([[${labelsUserBar}]]);
+                CHARTS.getHorizontalBarChart();
+            </script>
+        </section>
     </article>
 </main>
 <footer class="footer" role="contentinfo" th:insert="~{fragments/footer}">
